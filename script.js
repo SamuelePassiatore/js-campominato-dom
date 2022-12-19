@@ -27,6 +27,22 @@ const createCell = (number) => {
     return cell;
 }
 
+// Funzione per generare un numero random
+const getUniqueRandomNumber = (min, max, numbers) => {
+  let bombs = [];
+  
+  while (bombs.length < numbers) {
+    let randomNumber = Math.floor(Math.random() * (max + 1 - min)) + min;
+    if (!bombs.includes(randomNumber)) {
+      bombs.push(randomNumber);
+    };
+  } 
+
+return bombs;
+}
+
+
+  
 // ! OPERAZIONI PRELIMINARI -----------------------------------
 // Prendo gli elementi dal DOM
 const grid = document.getElementById('grid');
@@ -34,8 +50,14 @@ const button = document.getElementById('button');
 const difficultyLevel = document.getElementById('difficulty-level');
 
 // ! OPERAZIONI D'AVVIO ---------------------------------------
+
 // Aggancio l'event listener al button
 button.addEventListener('click', () => {
+
+  // Genero 16 numeri randomici unici
+  const newNumbers = getUniqueRandomNumber(1, 100, 16);
+  console.log(newNumbers);
+
   // Cambio il testo del bottone ricomincia
   button.innerText = 'Ricomincia';
   // Svuoto la griglia
