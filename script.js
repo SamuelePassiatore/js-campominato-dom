@@ -29,16 +29,26 @@ const createCell = (number) => {
 }
 
 // Funzione per generare un numero random
-const getUniqueRandomNumber = (min, max, numbers) => {
-  let bombs = [];
+const generateBombs = (maxNumber, totalNumbers) => {
+  const bombs = [];
   
-  while (bombs.length < numbers) {
-    let randomNumber = Math.floor(Math.random() * (max + 1 - min)) + min;
-    if (!bombs.includes(randomNumber)) {
+  while (bombs.length < totalNumbers) {
+    let random;
+    do {
+      randomNumber = Math.floor(Math.random() * maxNumber) + 1;
+    } while (bombs.includes(randomNumber)) {
       bombs.push(randomNumber);
-    };
+    }
   } 
-return bombs;
+  return bombs;
+}
+
+let isGameOver = false;
+// Funzione per terminare la partita 
+const gameOver = (score, hasHitBomb) => {
+  const message = hasHitBomb ? `Hai perso! Punti totalizzati: ${score}` : `Hai vinto! Hai raggiunto gli ${score} punti!`;
+  alert(message);
+  isGameOver = true;
 }
 
 
@@ -48,16 +58,13 @@ return bombs;
 const grid = document.getElementById('grid');
 const button = document.getElementById('button');
 const difficultyLevel = document.getElementById('difficulty-level');
+const displayScore = document.getElementById('display-score');
 
 // ! OPERAZIONI D'AVVIO ---------------------------------------
 
 // Aggancio l'event listener al button
 button.addEventListener('click', () => {
-
-  // Genero 16 numeri randomici unici
-  const newNumbers = getUniqueRandomNumber(1, 100, 16);
-  console.log(newNumbers);
-
+  isGameOver = false;
   // Cambio il testo del bottone ricomincia
   button.innerText = 'Ricomincia';
   // Svuoto la griglia
@@ -89,22 +96,49 @@ button.addEventListener('click', () => {
 
   // Preparo la variabile del punteggio
   let score = 0;
+
+  // Preparo il numero di bombe
+  const totalBombs = 16;
+
+  // Punteggio massimo
+  const maxPoints = totalCells - totalBombs;
+
+  // Genero le bombe
+  const bombs = generateBombs(totalCells, totalBombs);
+  console.log(bombs);
+
+// ! SVOLGIMENTO ---------------------------------------
     // Renderizzo le celle
     for (let i = 0; i < totalCells; i++){
       // Creo una cella 
       const cell = createCell(i + 1);
 
-       // Aggiungo un event listener sulla singola cella per cambiare colore
+       // Aggiungo un event listener sulla singola cella
       cell.addEventListener('click', () => {
         // Controllo se era stata già cliccata
-        if(cell.classList.contains('clicked')) {
+        if(isGameOver || cell.classList.contains('clicked')) {
           return;
         }
-        
+        // Aggiungo la classe clicked
         cell.classList.add('clicked');
+
+        // Controllo se ho preso una bomba 
+        const cellNumber = parseInt(cell.innerText);
+        const hasHitBomb = bombs.includes(cellNumber);
+        if (hasHitBomb) {
+          cell.classList.add('bomb');
+          gameOver(score, hasHitBomb);
+        } else {
         // Aumento il punteggio al click
-        ++score;
+        displayScore.innerText = ++score;
         console.log(score);
+
+          // Verifico se l'utente ha vinto
+          if (score === maxPoints){
+            gameOver(score, hasHitBomb);
+          }
+        }
+
       });
 
     

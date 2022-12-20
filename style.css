@@ -55,7 +55,12 @@
   }
 
   #grid .cell.clicked {
-    background-color: aquamarine;
+    background-color: dodgerblue;
+    cursor: not-allowed;
+  }
+
+  #grid .cell.clicked.bomb {
+    background-color: red;
   }
 
   #grid.easy .cell {
