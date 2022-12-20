@@ -96,6 +96,11 @@ button.addEventListener('click', () => {
 
        // Aggiungo un event listener sulla singola cella per cambiare colore
       cell.addEventListener('click', () => {
+        // Controllo se era stata già cliccata
+        if(cell.classList.contains('clicked')) {
+          return;
+        }
+        
         cell.classList.add('clicked');
         // Aumento il punteggio al click
         ++score;
