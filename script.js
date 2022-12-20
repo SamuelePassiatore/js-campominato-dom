@@ -20,6 +20,7 @@ Aggiungere una select accanto al bottone di generazione, che fornisca una scelta
 */
 
 // ! FUNCTIONS ------------------------------------------------
+// Funzione per creare una cella
 const createCell = (number) => {
     const cell = document.createElement('div');
     cell.append(number);
@@ -37,7 +38,6 @@ const getUniqueRandomNumber = (min, max, numbers) => {
       bombs.push(randomNumber);
     };
   } 
-
 return bombs;
 }
 
@@ -87,16 +87,24 @@ button.addEventListener('click', () => {
   // Calcolo il totale delle celle
   const totalCells = cols * rows;
 
+  // Preparo la variabile del punteggio
+  let score = 0;
     // Renderizzo le celle
     for (let i = 0; i < totalCells; i++){
       // Creo una cella 
       const cell = createCell(i + 1);
-      // Aggiungo un event listener sulla singola cella per cambiare colore
+
+       // Aggiungo un event listener sulla singola cella per cambiare colore
       cell.addEventListener('click', () => {
-      cell.classList.toggle('clicked');
-      console.log(i + 1);
+        cell.classList.add('clicked');
+        // Aumento il punteggio al click
+        ++score;
+        console.log(score);
       });
+
+    
       // Appendo in pagina
       grid.appendChild(cell);
     }
+
 });
